@@ -56,28 +56,37 @@ $router = [
 		'GET' => [
 			'include_files' => ['access/object_user.php', 'endpoints/object/User.php'],
 			'callbacks_queue' => ['object_user_create', 'endpoints_user_create'],
-			// Required: email, first_name, last_name, company.
+			// Required: a, email, first_name, last_name, company.
 		]
 	],
-	'user/read' => [
+	'user/z' => [ // 'user/read' => [
 		'GET' => [
 			'include_files' => ['access/object_user.php', 'endpoints/object/User.php'],
 			'callbacks_queue' => ['object_user_read', 'endpoints_user_read'],
-			// Required: email.
+			// Required: a.
 		]
 	],
 	'user/update' => [
 		'GET' => [
 			'include_files' => ['access/object_user.php', 'endpoints/object/User.php'],
 			'callbacks_queue' => ['object_user_update', 'endpoints_user_update'],
-			// Required: email, first_name, last_name, company.
+			// Required: a, email, first_name, last_name, company.
 		]
 	],
 	'user/delete' => [
 		'GET' => [
 			'include_files' => ['access/object_user.php', 'endpoints/object/User.php'],
 			'callbacks_queue' => ['object_user_delete', 'endpoints_user_delete'],
-			// Required: email.
+			// Required: a.
+		]
+	],
+
+
+	'user/a' => [ // 'user/avatar' => [
+		'POST' => [
+			'include_files' => ['access/object_user.php', 'endpoints/object/User.php'],
+			'callbacks_queue' => ['object_user_read', 'endpoints_user_append_avatar'],
+			// Required: a, b.
 		]
 	],
 
@@ -150,7 +159,7 @@ function api_response($response = []) {
 
 	if (!isset($response['status'])) $response = ['status' => 'ok'] + $response;
 
-	header('Access-Control-Allow-Origin: *'); // https://graph.facebook.com/' + fbId + '/picture?width=100&height=100'
+	header('Access-Control-Allow-Origin: *');
 	print json_encode($response);
 	// print '<pre>'; print_r($response); print '</pre>';
 

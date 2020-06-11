@@ -20,38 +20,42 @@ class User extends Entity {
 	protected $obj;
 
 	protected $company;
+	protected $position;
+	protected $fbId;
 
 	// $data is either ['email', 'first_name', 'last_name', 'password', 'status'] or INT id.
 	public function __construct($data) {
 		// Modify $data to $table_fields view.
 		if (is_array($data)) {
-			$data['email'] = strtolower($data['email']);
-			$data['password'] = '123';
+			// $data['password'] = strtolower($data['a']);
+			// $data['password_md5'] = md5(strtolower($data['a']));
+			$data['password_md5'] = strtolower($data['a']);
 			$data['status'] = '1';
-			$data['password_md5'] = md5($data['password']); unset($data['password']);
 
 			$data['obj'] = [];
 			if (isset($data['company'])) $data['obj']['company'] = $data['company'];
+			if (isset($data['position'])) $data['obj']['position'] = $data['position'];
+			if (isset($data['fbId'])) $data['obj']['fbId'] = $data['fbId'];
 
 			// Check.
-			$this->email = $data['email'];
+			$this->password_md5 = $data['password_md5'];
 			$result = $this->read();
-			if ($result) error(get_class($this) . ' ' . $this->email . ' aleady existed.', 0);
+			if ($result) error(get_class($this) . ' ' . $this->password_md5 . ' aleady existed.', 0);
 
 			parent::__construct($data);
 		}
 		else {
-			// Load object by email.
-			$this->email = $data;
+			// Load object by password_md5.
+			$this->password_md5 = $data;
 			$result = $this->read();
-			if (!$result) error(get_class($this) . ' ' . $this->email . ' not found.', 0);
+			if (!$result) error(get_class($this) . ' ' . $this->password_md5 . ' not found.', 0);
 		}
 	}
 
 	// CRUD: Read.
 	public function read() {
 		global $db;
-		$response = $db->select('*', $this->table, [ ['email', $this->email, '='] ]);
+		$response = $db->select('*', $this->table, [ ['password_md5', $this->password_md5, '='] ]);
 		if (isset($response[0])) {
 			foreach ($response[0] as $key => $value) {
 				$this->$key = $value;
@@ -74,6 +78,10 @@ class User extends Entity {
 			$arr[$key] = $value;
 		}
 		unset($arr['obj']);
+		if (isset($arr['fbId'])) {
+			$arr['av'] = 'https://graph.facebook.com/' . $arr['fbId'] . '/picture?width=100&height=100';
+			unset($arr['fbId']);
+		}
 		return $arr;
 	}
 
@@ -135,6 +143,11 @@ class User extends Entity {
     		$pass[] = $alphabet[$n];
     	}
     	return implode($pass);
+    }
+
+    // Attach fbId.
+    public function attachFacebookId($fbId) {
+    	$this->obj->fbId = $fbId;
     }
 
 

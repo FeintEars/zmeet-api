@@ -102,7 +102,7 @@ abstract class Entity {
 		global $db;
 		$update_values = array_flip($this->table_fields);
 		foreach ($update_values as $key => $value) {
-			$update_values[$key] = $this->$key;
+			$update_values[$key] = (is_object($this->$key) || is_array($this->$key)) ? json_encode($this->$key) : $this->$key;
 		}
 		$response = $db->update($this->table, $update_values, [ ['id', $this->id, '='] ] );
 		return $response;
