@@ -19,20 +19,60 @@ class User extends Entity {
 	protected $status;
 	protected $obj;
 
+	protected $company;
+
 	// $data is either ['email', 'first_name', 'last_name', 'password', 'status'] or INT id.
 	public function __construct($data) {
 		// Modify $data to $table_fields view.
 		if (is_array($data)) {
 			$data['email'] = strtolower($data['email']);
+			$data['password'] = '123';
+			$data['status'] = '1';
 			$data['password_md5'] = md5($data['password']); unset($data['password']);
-			$data['obj'] = '';
+
+			$data['obj'] = [];
+			if (isset($data['company'])) $data['obj']['company'] = $data['company'];
+
+			// Check.
+			$this->email = $data['email'];
+			$result = $this->read();
+			if ($result) error(get_class($this) . ' ' . $this->email . ' aleady existed.', 0);
+
+			parent::__construct($data);
 		}
-		parent::__construct($data);
+		else {
+			// Load object by email.
+			$this->email = $data;
+			$result = $this->read();
+			if (!$result) error(get_class($this) . ' ' . $this->email . ' not found.', 0);
+		}
+	}
+
+	// CRUD: Read.
+	public function read() {
+		global $db;
+		$response = $db->select('*', $this->table, [ ['email', $this->email, '='] ]);
+		if (isset($response[0])) {
+			foreach ($response[0] as $key => $value) {
+				$this->$key = $value;
+			}
+
+			$this->obj = json_decode($this->obj);
+			foreach ($this->obj as $key => $value) {
+				$this->$key = $value;
+			}
+
+			return TRUE;
+		}
+		return FALSE;
 	}
 
 	public function getArray() {
 		$arr = parent::getArray();
 		unset($arr['password_md5']);
+		foreach ($arr['obj'] as $key => $value) {
+			$arr[$key] = $value;
+		}
 		unset($arr['obj']);
 		return $arr;
 	}

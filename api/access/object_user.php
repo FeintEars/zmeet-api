@@ -11,32 +11,33 @@ require_once 'api/entities/User.php';
 /**
  * User object - Create.
  */
+function object_user_create($params) {
+	if (isset($_ENV['APP_ADMIN'])) {
+		if ($_ENV['APP_ADMIN']) {
+			return TRUE; // Admin mode is enabled.
+		}
+	}
 
-// We use user/login, user/register and user/invite endpoints instead of that.
+	error_access_denied(); // Admin mode is not enabled.
+}
 
 /**
  * User object - Read.
  */
 function object_user_read($params) {
-	object_user_delete($params); // Same access.
+	return TRUE; // Always TRUE.
 }
 
 /**
  * User object - Update.
  */
 function object_user_update($params) {
-	object_user_delete($params); // Same access.
+	object_user_create($params); // Same access.
 }
 
 /**
  * User object - Delete.
  */
 function object_user_delete($params) {
-	user_access($params);
-
-	global $user;
-
-	// if ($user is admin) return TRUE;
-
-	error_access_denied();
+	object_user_create($params); // Same access.
 }

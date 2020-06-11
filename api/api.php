@@ -25,6 +25,9 @@ $router = [
 		],
 	],
 
+	/**
+	 * User Login/Register.
+	 */
 
 	'user/login' => [
 		'POST' => [
@@ -45,27 +48,36 @@ $router = [
 		]
 	],
 
+	/**
+	 * User CRUD.
+	 */
 
+	'user/create' => [
+		'GET' => [
+			'include_files' => ['access/object_user.php', 'endpoints/object/User.php'],
+			'callbacks_queue' => ['object_user_create', 'endpoints_user_create'],
+			// Required: email, first_name, last_name, company.
+		]
+	],
 	'user/read' => [
 		'GET' => [
 			'include_files' => ['access/object_user.php', 'endpoints/object/User.php'],
 			'callbacks_queue' => ['object_user_read', 'endpoints_user_read'],
-			// Required: (id, time, hash), user_id.
+			// Required: email.
 		]
 	],
 	'user/update' => [
-		'POST' => [
+		'GET' => [
 			'include_files' => ['access/object_user.php', 'endpoints/object/User.php'],
 			'callbacks_queue' => ['object_user_update', 'endpoints_user_update'],
-			// Required: (id, time, hash), user_id.
-			// Optional: first_name, last_name, password, password2.
+			// Required: email, first_name, last_name, company.
 		]
 	],
 	'user/delete' => [
-		'POST' => [
+		'GET' => [
 			'include_files' => ['access/object_user.php', 'endpoints/object/User.php'],
 			'callbacks_queue' => ['object_user_delete', 'endpoints_user_delete'],
-			// Required: (id, time, hash), user_id.
+			// Required: email.
 		]
 	],
 

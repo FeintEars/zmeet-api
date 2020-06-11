@@ -27,10 +27,6 @@ $sql[] = "CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
-$sql[] = "DELETE FROM `users` WHERE `id`=1;";
-$sql[] = "INSERT INTO `users` (`id`, `email`, `first_name`, `last_name`, `password_md5`, `status`, `obj`) VALUES
-(1, 'admin', 'Admin', 'Admin', '21232f297a57a5a743894a0e4a801fc3', 1, '');";
-
 // Execute sql dump.
 try {
   require_once 'api/includes/environment.php';

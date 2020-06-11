@@ -78,7 +78,7 @@ abstract class Entity {
 		global $db;
 		$insert_values = array_flip($this->table_fields);
 		foreach ($insert_values as $key => $value) {
-			$insert_values[$key] = $this->$key;
+			$insert_values[$key] = is_array($this->$key) ? json_encode($this->$key) : $this->$key;
 		}
 		$this->id = $db->insert($this->table, $insert_values);
 		return TRUE;
