@@ -149,6 +149,8 @@ function api_response($response = []) {
 	if (isset($db)) $db->close();
 
 	if (!isset($response['status'])) $response = ['status' => 'ok'] + $response;
+
+	header('Access-Control-Allow-Origin: *'); // https://graph.facebook.com/' + fbId + '/picture?width=100&height=100'
 	print json_encode($response);
 	// print '<pre>'; print_r($response); print '</pre>';
 

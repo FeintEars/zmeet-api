@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+	<title>Завантажити аватар з Facebook.com | zMeet</title>
+	<meta charset="UTF-8">
+</head>
+<body style="text-align: center;">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script>
+		var urlParam = function (name) {
+			var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+			if (results==null) {
+				return null;
+			}
+			return decodeURI(results[1]) || 0;
+		}
+		var saveAvatar = function (b) {
+			$('#step1').css('display', 'none');
+			var a = urlParam('a');
+			if (a) {
+				$.post('https://api.zmeet.life/user/a', {a: a, b: b}, function(resp) {
+					$('#step2').css('display', 'block');
+				});
+			}
+			else {
+				$('#step2').css('display', 'block');
+			}
+		}
+		var checkFBLogin = function() {
+			FB.getLoginStatus(function(response) {
+				if (response.status == 'connected') {
+					saveAvatar(response.authResponse.userID);
+				}
+				else {
+					$('#step2').css('display', 'none');
+					$('#step1').css('display', 'block');
+				}
+			});
+		}
+		window.fbAsyncInit = function() {
+			FB.init({
+				appId: '250766789649630',
+				cookie: true,
+				xfbml: true,
+				version: 'v7.0'
+			});
+			FB.AppEvents.logPageView();   
+			checkFBLogin();
+		};
+		(function(d, s, id){
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) {return;}
+			js = d.createElement(s); js.id = id;
+			js.src = "https://connect.facebook.net/en_US/sdk.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+	</script>
+
+	<div>
+		<img src="https://static.tildacdn.com/tild3630-3632-4633-b934-356231636534/Fill_5.svg" width="200px" height="auto"><br /><br />
+	</div>
+
+	<div id="step1" style="display: none;">
+		<p>Авторизуйтеся у Facebook.com та надайте zMEET доступ до аватарки.</p>
+		<fb:login-button scope="public_profile" onlogin="checkFBLogin();" data-size="large" data-button-type="login_with"></fb:login-button>
+	</div>
+
+	<div id="step2" style="display: none;">
+		<p>Ваш аватар збережено у zMEET.<br />Повертайтеся назад до додатка.</p>
+	</div>
+
+</body>
+</html>
