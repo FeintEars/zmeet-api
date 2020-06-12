@@ -7,7 +7,10 @@ require_once 'api/entities/User.php';
  * Endpoint: POST user/create.
  */
 function endpoints_user_create($params) {
-	check_error_required(['a', 'email', 'first_name', 'last_name', 'company', 'position'], $params);
+	check_error_required(['a', 'email'], $params);
+	foreach (['first_name', 'last_name', 'company', 'position'] as $field) {
+		if (!isset($params[$field])) $params[$field] = '';
+	}
 
 	$user = new User($params);
 
@@ -45,6 +48,9 @@ function endpoints_user_read($params) {
  */
 function endpoints_user_update($params) {
 	check_error_required(['a', 'email', 'first_name', 'last_name', 'company', 'position'], $params);
+	foreach (['first_name', 'last_name', 'company', 'position'] as $field) {
+		if (!isset($params[$field])) $params[$field] = '';
+	}
 
 	$user = new User($params['a']);
 

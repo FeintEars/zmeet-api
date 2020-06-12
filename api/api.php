@@ -56,7 +56,8 @@ $router = [
 		'GET' => [
 			'include_files' => ['access/object_user.php', 'endpoints/object/User.php'],
 			'callbacks_queue' => ['object_user_create', 'endpoints_user_create'],
-			// Required: a, email, first_name, last_name, company.
+			// Required: a, email.
+			// Optional: first_name, last_name, company, position.
 		]
 	],
 	'user/z' => [ // 'user/read' => [
@@ -70,7 +71,8 @@ $router = [
 		'GET' => [
 			'include_files' => ['access/object_user.php', 'endpoints/object/User.php'],
 			'callbacks_queue' => ['object_user_update', 'endpoints_user_update'],
-			// Required: a, email, first_name, last_name, company.
+			// Required: a, email.
+			// Optional: first_name, last_name, company, position.
 		]
 	],
 	'user/delete' => [
