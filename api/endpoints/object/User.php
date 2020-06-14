@@ -32,6 +32,7 @@ function endpoints_user_read($params) {
 	check_error_required(['a'], $params);
 
 	$user = new User($params['a']);
+	$user->setStatus('10');
 
 	// Response.
 	$user_arr = $user->getArray();

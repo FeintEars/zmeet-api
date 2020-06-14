@@ -160,6 +160,7 @@ class User extends Entity {
     	// 1 - Active
     	// 2 - Invited
     	// 3 - Email is not approved yet
+    	// 10 - Logged In
     	$this->status = $status;
     	$this->update();
     }
