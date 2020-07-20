@@ -93,6 +93,20 @@ function endpoints_user_delete($params) {
 function endpoints_user_append_avatar($params) {
 	check_error_required(['a', 'b'], $params);
 
+	global $db;
+	$password_md5 = strtolower($params['a']);
+	$response = $db->select('*', 'users', [ ['password_md5', $password_md5, '='] ]);
+	if (!isset($response[0])) {
+		$db->insert('users', [
+			'password_md5' => $password_md5,
+			'email' => '',
+			'first_name' => '',
+			'last_name' => '',
+			'status' => 1,
+			'obj' => '{"company":"","position":""}'
+		]);
+	}
+
 	$user = new User($params['a']);
 	$user->attachFacebookId($params['b']);
 	$user->update();
